@@ -2,8 +2,6 @@ package com.poo.escola.entidades;
 
 import java.util.Date;
 
-import java.util.Date;
-
 public class Professor extends Pessoa {
     private Date dataAdmissao;
     private double salario;
