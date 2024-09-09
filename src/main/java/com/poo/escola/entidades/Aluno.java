@@ -9,8 +9,9 @@ public class Aluno  extends Pessoa{
    
 public Aluno(int matricula, String cpf, Date dataNascimento, Endereco endereco, String telefone, String email,
         String senha, Date dataMatricula, String curso, Notas nota) {
+            
     super(matricula, cpf, dataNascimento, endereco, telefone, email, senha);
-    DataMatricula = dataMatricula;
+    this.DataMatricula = dataMatricula;
     this.curso = curso;
     this.nota = nota;
 }
@@ -37,6 +38,5 @@ public Notas getNota() {
 
 public void setNota(Notas nota) {
     this.nota = nota;
-}
-
     }
+ }

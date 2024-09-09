@@ -2,9 +2,12 @@ package com.poo.escola.entidades;
 
 import java.util.Date;
 
-public class Pessoa {
+public abstract class Pessoa {
+    public int contMatricula = 1001;
+    
     private int matricula;
     private String cpf;
+    private String nome;
     private Date dataNascimento;
     private Endereco endereco;
     private String telefone;
@@ -13,7 +16,8 @@ public class Pessoa {
 
     public Pessoa(int matricula, String cpf, Date dataNascimento, Endereco endereco, String telefone, String email,
             String senha) {
-        this.matricula = matricula;
+        this.matricula = contMatricula;
+        contMatricula++;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;
@@ -22,6 +26,12 @@ public class Pessoa {
         this.senha = senha;
     }
 
+    public Pessoa() {
+        this.matricula = contMatricula;
+        contMatricula++;
+    }
+
+    
     public int getMatricula() {
         return matricula;
     }
@@ -35,7 +45,19 @@ public class Pessoa {
     }
 
     public void setCpf(String cpf) {
+        if(cpf == null || cpf.isEmpty() || !isValidCpf(cpf)){
+            System.out.println("Numero de cpf invalido!");
+        }else {
         this.cpf = cpf;
+        }
+    }
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Date getDataNascimento() {
@@ -75,7 +97,26 @@ public class Pessoa {
     }
 
     public void setSenha(String senha) {
+        if (senha == null || senha.isEmpty() || !isValidPassword(senha)){
+            System.out.println("Senha invalida! .");
+        }else {
         this.senha = senha;
+        }
+    }
+
+    private boolean isValidCpf(String cpf){
+        if(cpf.length() != 11){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private boolean isValidPassword(String senha){
+        if (senha.length() < 8){
+            return false;
+        }else {
+            return true;
+        }
     }
 }
-     

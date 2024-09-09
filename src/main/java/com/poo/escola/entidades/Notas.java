@@ -11,5 +11,27 @@ public class Notas {
         this.disciplina = disciplina;
     }
 
+    public int getNota() {
+        return nota;
+    }
 
+    public void setNota(int nota) {
+        this.nota = nota;
+    }
+
+    public Aluno getAlunos() {
+        return alunos;
+    }
+
+    public void setAlunos(Aluno alunos) {
+        this.alunos = alunos;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
+    }
 }
