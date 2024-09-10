@@ -51,7 +51,7 @@ public abstract class Pessoa {
         this.cpf = cpf;
         }
     }
-    
+
     public String getNome() {
         return nome;
     }
@@ -118,5 +118,20 @@ public abstract class Pessoa {
         }else {
             return true;
         }
+
+    }
+
+    @Override
+    public String toString() {
+        return 
+        "Pessoa [contMatricula=" + contMatricula + 
+        ", matricula=" + matricula + ", cpf=" + cpf + 
+        ", nome=" + nome + 
+        ", dataNascimento=" + dataNascimento + 
+        ", endereco=" + endereco + 
+        ", telefone=" + telefone + 
+        ", email=" + email + 
+        ", senha=" + senha + "]";
+        
     }
 }
