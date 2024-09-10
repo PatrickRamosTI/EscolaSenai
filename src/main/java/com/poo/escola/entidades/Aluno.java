@@ -5,15 +5,15 @@ import java.util.Date;
 public class Aluno  extends Pessoa{
    private Date DataMatricula;
    private String curso;
-   private Notas nota;
+   private Situacao situacao;
    
 public Aluno(int matricula, String cpf, Date dataNascimento, Endereco endereco, String telefone, String email,
-        String senha, Date dataMatricula, String curso, Notas nota) {
+        String senha, Date dataMatricula, String curso, Situacao situacao ) {
             
     super(matricula, cpf, dataNascimento, endereco, telefone, email, senha);
     this.DataMatricula = dataMatricula;
     this.curso = curso;
-    this.nota = nota;
+    this.situacao = situacao;
 }
 
 public Date getDataMatricula() {
@@ -32,11 +32,11 @@ public void setCurso(String curso) {
     this.curso = curso;
 }
 
-public Notas getNota() {
-    return nota;
+public Situacao  getNota() {
+    return situacao;
 }
 
-public void setNota(Notas nota) {
-    this.nota = nota;
+public void setNota(Situacao situacao) {
+    this.situacao  =situacao;
     }
  }
