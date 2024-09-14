@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Secretaria extends Pessoa {
    
-    public static List<Secretaria> secretaria = new ArrayList<Secretaria>();
+    public static List<Secretaria> secretarios = new ArrayList<Secretaria>();
 
-    public static void menuSecretariaAluno() {
+    public static void menuSecretarioAluno() {
         int opcaoS = 8;
 
         do {
@@ -48,7 +48,7 @@ public class Secretaria extends Pessoa {
         } while (opcaoS != 0);
     }
 
-    public static void menuSecretariaProfessor() {
+    public static void menuSecretarioProfessor() {
         int opcaoT = 8;
 
         do {
