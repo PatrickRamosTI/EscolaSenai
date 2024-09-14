@@ -1,14 +1,17 @@
-package com.poo.escola.entidades;
+package com.poo.escola.entidade;
+
+import com.poo.escola.enuns.UnidadeFederal;
 
 public class Endereco {
-    String logradouro;
-    int numero;
-    String complemento;
-    String cidade;
-    String estado;
-    String cep;
-    
-    public Endereco(String logradouro, int numero, String complemento, String cidade, String estado, String cep) {
+    private String logradouro;
+    private int numero;
+    private String complemento;
+    private String cidade;
+    private UnidadeFederal estado;
+    private String cep;
+
+    public Endereco(String logradouro, int numero, String complemento,
+                    String cidade, UnidadeFederal estado, String cep) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -16,50 +19,64 @@ public class Endereco {
         this.estado = estado;
         this.cep = cep;
     }
+
     public String getLogradouro() {
         return logradouro;
     }
+
     public void setLogradouro(String logradouro) {
         this.logradouro = logradouro;
     }
+
     public int getNumero() {
         return numero;
     }
+
     public void setNumero(int numero) {
         this.numero = numero;
     }
+
     public String getComplemento() {
         return complemento;
     }
+
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
+
     public String getCidade() {
         return cidade;
     }
+
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
-    public String getEstado() {
+
+    public UnidadeFederal getEstado() {
         return estado;
     }
-    public void setEstado(String estado) {
+
+    public void setEstado(UnidadeFederal estado) {
         this.estado = estado;
     }
+
     public String getCep() {
         return cep;
     }
+
     public void setCep(String cep) {
         this.cep = cep;
     }
+
     @Override
     public String toString() {
-        return "Endereco [logradouro=" + logradouro + 
-        ", numero=" + numero +
-        ", complemento=" + complemento +
-        ", cidade=" + cidade + 
-        ", estado=" + estado + 
-        ", cep=" + cep + "]";
+        return "Endereco{" +
+                "Logradouro='" + logradouro + '\'' +
+                ", Numero=" + numero +
+                ", Complemento='" + complemento + '\'' +
+                ", Cidade='" + cidade + '\'' +
+                ", Estado='" + estado.getNomePorExtenso() + '\'' +
+                ", Cep='" + cep + '\'' +
+                '}';
     }
-    
-    }
+}
