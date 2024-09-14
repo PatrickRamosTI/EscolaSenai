@@ -1,163 +1,113 @@
 package com.poo.escola.entidade;
 
-import com.poo.escola.enuns.Situacao;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.*;
+public class Nota {
+    private Double nota;
+    private Aluno aluno;
+    private Disciplina disciplina;
 
-public class Menu {
-    private static Situacao situacao;
-    private static String usuarioLogado = null;
-    private static String papelUsuario = null;
+    public static List<Nota> listaNotas = new ArrayList<Nota>();
 
-    public static void imprimirRegistro(String usuarioLogado) {
-        Aluno aluno = Aluno.getAlunoPorEmail(usuarioLogado);
+    public Double getNota() {
+        return nota;
+    }
 
-        if (aluno != null) {
-            System.out.println("Registro do Aluno: ");
-            System.out.println("Nome: " + aluno.getNome());
-            System.out.println("Email: " + aluno.getEmail());
+    public void setNota(Double nota) {
+        this.nota = nota;
+    }
 
-            Nota.carregarNotasDeArquivo(); // Supondo que o método correto seja este
+    public Aluno getAluno() {
+        return aluno;
+    }
 
-            List<Nota> notasDoAluno = new ArrayList<>();
-            for (Nota nota : Nota.getListaNotas()) {
-                if (nota.getAluno().equals(aluno)) {
-                    notasDoAluno.add(nota);
-                }
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
+    }
+
+    public static List<Nota> getListaNotas() {
+        return listaNotas;
+    }
+
+    public static void salvarNotasEmArquivo() {
+        File arquivo = new File("notas.txt");
+        System.out.println("Salvando notas no arquivo: " + arquivo.getAbsolutePath());
+        if (!arquivo.canWrite()) {
+            System.out.println("Sem permissão de escrita no arquivo. Tentando conceder permissão...");
+            arquivo.setWritable(true); // Concede permissão de escrita ao arquivo
+        }
+        if (arquivo.exists()) {
+            arquivo.delete(); // Deleta o arquivo se ele já existir
+        }
+        try {
+            arquivo.createNewFile(); // Cria um novo arquivo
+        } catch (IOException e) {
+            System.err.println("Erro ao criar o novo arquivo: " + e.getMessage());
+            return; // Sai do método se houver um erro ao criar o arquivo
+        }
+        try (FileWriter escritor = new FileWriter("notas.txt", true)) {
+            for (Nota nota : listaNotas) {
+                escritor.write(nota.getAluno().getEmail() + "," + nota.getDisciplina().getNomeDisciplina() + "," + nota.getNota() + "\n");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            if (!notasDoAluno.isEmpty()) {
-                Situacao situacao = Situacao.EM_RECUPERACAO;
-                for (Nota nota : notasDoAluno) {
-                    if (nota.getNota() >= 6) {
-                        situacao = Situacao.APROVADO;
-                        break;
-                    } else if (nota.getNota() < 3) {
-                        situacao = Situacao.REPROVADO;
-                        break;
-                    }
-                }
-                System.out.println("Situação: " + situacao.getStts());
-                System.out.println("Notas: ");
-                for (Nota nota : notasDoAluno) {
-                    System.out.println("Disciplina: " + nota.getDisciplina().getNomeDisciplina());
-                    System.out.println("Nota: " + nota.getNota());
-                }
-            } else {
-                System.out.println("Nenhuma nota encontrada.");
+    public static void carregarNotasDeArquivo() {
+        File arquivo = new File("notas.txt");
+        if (!arquivo.exists()) {
+            System.out.println("Arquivo não encontrado: " + arquivo.getAbsolutePath());
+            return;
+        }
+
+        listaNotas.clear(); // Limpa a lista antes de carregar novos dados
+
+        try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo.getAbsolutePath()))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                processarLinha(linha);
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+        }
+    }
+
+    private static void processarLinha(String linha) {
+        String[] partes = linha.split(",");
+        if (partes.length != 3) {
+            System.out.println("Formato de linha inválido: " + linha);
+            return;
+        }
+
+        Aluno aluno = Aluno.getAlunoPorEmail(partes[0]);
+        Disciplina disciplina = Disciplina.getDisciplinaPorNome(partes[1]);
+
+        if (aluno != null && disciplina != null) {
+            try {
+                Double nota = Double.parseDouble(partes[2]);
+                Nota notaObjeto = new Nota();
+                notaObjeto.setAluno(aluno);
+                notaObjeto.setDisciplina(disciplina);
+                notaObjeto.setNota(nota);
+                aluno.adicionarNota(notaObjeto);
+                disciplina.adicionarNota(notaObjeto);
+                Nota.getListaNotas().add(notaObjeto);
+            } catch (NumberFormatException e) {
+                System.out.println("Formato de nota inválido: " + partes[2]);
             }
         } else {
-            System.out.println("Aluno não encontrado.");
+            System.out.println("Erro ao carregar nota: Aluno ou disciplina não encontrado");
         }
-    }
-
-    public static void login() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("-- Bem-vindo ao sistema, entre com seu login --");
-        System.out.print("Email: ");
-        String emailUsuario = sc.nextLine();
-        System.out.print("Senha: ");
-        String senha = sc.nextLine();
-
-        boolean usuarioValido = false;
-
-        for (Secretaria s : Secretaria.getSecretarios()) {
-            if (emailUsuario.equals(s.getEmail()) && senha.equals(s.getSenha())) {
-                usuarioLogado = emailUsuario;
-                papelUsuario = "Secretária";
-                System.out.println("Login realizado com sucesso. (Secretária)!");
-                usuarioValido = true;
-                break;
-            }
-        }
-        if (!usuarioValido) {
-            for (Professor t : Professor.getListaProfessores()) {
-                if (emailUsuario.equals(t.getEmail()) && senha.equals(t.getSenha())) {
-                    usuarioLogado = emailUsuario;
-                    papelUsuario = "Professor";
-                    System.out.println("Login realizado com sucesso. (Professor)!");
-                    usuarioValido = true;
-                    break;
-                }
-            }
-        }
-        if (!usuarioValido) {
-            for (Aluno sT : Aluno.getListaAlunos()) {
-                if (emailUsuario.equals(sT.getEmail()) && senha.equals(sT.getSenha())) {
-                    usuarioLogado = emailUsuario;
-                    papelUsuario = "Aluno";
-                    System.out.println("Login realizado com sucesso. (Aluno)!");
-                    usuarioValido = true;
-                    break;
-                }
-            }
-        }
-
-        if (!usuarioValido) {
-            System.out.println("Email ou senha inválidos. Tente novamente");
-            login();
-        }
-    }
-
-    public static void menuFinal() {
-        if (usuarioLogado == null) {
-            System.out.println("Você precisa fazer login primeiro.");
-            login();
-        }
-
-        int opcaoM;
-        Scanner sc = new Scanner(System.in);
-
-        do {
-            System.out.println("\n- MENU -");
-            System.out.println("O que você deseja fazer?");
-            switch (papelUsuario) {
-                case "Secretária":
-                    System.out.println("1- Menu Aluno.");
-                    System.out.println("2- Menu Professor:");
-                    break;
-                case "Professor":
-                    System.out.println("1- Lançar notas");
-                    break;
-                case "Aluno":
-                    System.out.println("1- Meu boletim");
-                    break;
-            }
-            System.out.println("0- Sair\n");
-            System.out.print("Digite uma opção: ");
-            opcaoM = sc.nextInt();
-            try {
-                System.out.println("\n");
-                switch (opcaoM) {
-                    case 1:
-                        if (papelUsuario.equals("Secretária")) {
-                            Secretaria.menuSecretarioAluno();
-                        } else if (papelUsuario.equals("Professor")) {
-                            Professor.registrarNotas();
-                        } else if (papelUsuario.equals("Aluno")) {
-                            imprimirRegistro(usuarioLogado);
-                        }
-                        break;
-                    case 2:
-                        if (papelUsuario.equals("Secretária")) {
-                            Secretaria.menuSecretarioProfessor();
-                        } else {
-                            System.out.println("Opção não disponível.");
-                        }
-                        break;
-                    case 0:
-                        System.out.println("Saindo...");
-                        usuarioLogado = null;
-                        papelUsuario = null;
-                        break;
-                    default:
-                        System.out.println("Opção inválida.");
-                        break;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Por favor, insira um número inteiro!");
-                sc.next(); // Limpar o buffer do scanner
-            }
-        } while (opcaoM != 0);
     }
 }
