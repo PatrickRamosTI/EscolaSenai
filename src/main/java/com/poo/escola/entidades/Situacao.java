@@ -1,16 +1,17 @@
-package com.poo.escola.entidades;
+package com.poo.escola.enuns;
 
 public enum Situacao {
-    APROVADO("Aprovado"),
-    REPROVADO("Reprovado"),
-    RECUPERACAO("Recuperacao");
+    APROVADO("APROVADO"),
+    REPROVADO("REPORVADO!"),
+    EM_RECUPERACAO("EM_RECUPERACAO");
 
     private final String stts;
-    
-    Situacao(String stts){
-        this.stts =stts;
+
+    Situacao(String stts) {
+        this.stts = stts;
     }
+
     public String getStts() {
         return stts;
-    }  
+    }
 }
