@@ -1,10 +1,11 @@
-package com.poo.escola.entidades;
+package com.poo.escola.entidade;
 
 import java.util.Date;
 
 public abstract class Pessoa {
-    public int contMatricula = 1001;
-    
+    public static int contMatricula = 1001;
+
+    // Atributos da classe pai
     private int matricula;
     private String cpf;
     private String nome;
@@ -14,11 +15,10 @@ public abstract class Pessoa {
     private String email;
     private String senha;
 
-    public Pessoa(int matricula, String cpf, Date dataNascimento, Endereco endereco, String telefone, String email,
-            String senha) {
-        this.matricula = contMatricula;
-        contMatricula++;
+    public Pessoa(String cpf, String nome, Date dataNascimento, Endereco endereco, String telefone, String email, String senha) {
+        this.matricula = contMatricula++;
         this.cpf = cpf;
+        this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;
         this.telefone = telefone;
@@ -27,17 +27,11 @@ public abstract class Pessoa {
     }
 
     public Pessoa() {
-        this.matricula = contMatricula;
-        contMatricula++;
+        this.matricula = contMatricula++;
     }
 
-    
     public int getMatricula() {
         return matricula;
-    }
-
-    public void setMatricula(int matricula) {
-        this.matricula = matricula;
     }
 
     public String getCpf() {
@@ -45,10 +39,10 @@ public abstract class Pessoa {
     }
 
     public void setCpf(String cpf) {
-        if(cpf == null || cpf.isEmpty() || !isValidCpf(cpf)){
-            System.out.println("Numero de cpf invalido!");
-        }else {
-        this.cpf = cpf;
+        if (cpf == null || cpf.isEmpty() || !isValidCpf(cpf)) {
+            System.out.println("Número de CPF inválido!");
+        } else {
+            this.cpf = cpf;
         }
     }
 
@@ -97,41 +91,32 @@ public abstract class Pessoa {
     }
 
     public void setSenha(String senha) {
-        if (senha == null || senha.isEmpty() || !isValidPassword(senha)){
-            System.out.println("Senha invalida! .");
-        }else {
-        this.senha = senha;
+        if (senha == null || senha.isEmpty() || !isValidPassword(senha)) {
+            System.out.println("Senha inválida.");
+        } else {
+            this.senha = senha;
         }
     }
 
-    private boolean isValidCpf(String cpf){
-        if(cpf.length() != 11){
-            return false;
-        }else{
-            return true;
-        }
+    private boolean isValidCpf(String cpf) {
+        return cpf.length() == 11;
     }
 
-    private boolean isValidPassword(String senha){
-        if (senha.length() < 8){
-            return false;
-        }else {
-            return true;
-        }
-
+    private boolean isValidPassword(String senha) {
+        return senha.length() >= 8;
     }
 
     @Override
     public String toString() {
-        return 
-        "Pessoa [contMatricula=" + contMatricula + 
-        ", matricula=" + matricula + ", cpf=" + cpf + 
-        ", nome=" + nome + 
-        ", dataNascimento=" + dataNascimento + 
-        ", endereco=" + endereco + 
-        ", telefone=" + telefone + 
-        ", email=" + email + 
-        ", senha=" + senha + "]";
-        
+        return "Pessoa{" +
+                "matricula=" + matricula +
+                ", cpf='" + cpf + '\'' +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", endereco=" + endereco +
+                ", telefone='" + telefone + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                '}';
     }
 }
