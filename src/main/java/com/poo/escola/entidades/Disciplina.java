@@ -1,14 +1,29 @@
-package com.poo.escola.entidades;
+package com.poo.escola.entidade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Disciplina {
     private String nomeDisciplina;
-    private Notas nota;
-    private Professor professor;
-    
-    public Disciplina(String nomeDisciplina, Notas nota, Professor professor) {
-        this.nomeDisciplina = nomeDisciplina;
-        this.nota = nota;
-        this.professor = professor;
+    private List<Nota> listaNotas = new ArrayList<>();
+
+    public List<Nota> getListaNotas() {
+        return listaNotas;
+    }
+
+    public void adicionarNota(Nota nota) {
+        this.listaNotas.add(nota);
+    }
+
+    public static List<Disciplina> listaDisciplinas = new ArrayList<Disciplina>();
+
+    public static Disciplina getDisciplinaPorNome(String nome) {
+        for (Disciplina disciplina : listaDisciplinas) {
+            if (disciplina.getNomeDisciplina().equals(nome)) {
+                return disciplina;
+            }
+        }
+        return null;
     }
 
     public String getNomeDisciplina() {
@@ -19,19 +34,32 @@ public class Disciplina {
         this.nomeDisciplina = nomeDisciplina;
     }
 
-    public Notas getNota() {
-        return nota;
+    public static List<Disciplina> getListaDisciplinas() {
+        return listaDisciplinas;
     }
 
-    public void setNota(Notas nota) {
-        this.nota = nota;
+    public static void mostrarListaDisciplinas() {
+        if (!Disciplina.listaDisciplinas.isEmpty()) {
+            System.out.println("Lista de disciplinas: ");
+            for (Disciplina d : listaDisciplinas) {
+                System.out.println((listaDisciplinas.indexOf(d) + 1) + "- " + d.getNomeDisciplina());
+            }
+        } else {
+            System.out.println("Não há disciplinas cadastradas. \n");
+        }
     }
 
-    public Professor getProfessor() {
-        return professor;
+    public static void popularDisciplinas() {
+        Disciplina disciplina1 = new Disciplina();
+        disciplina1.setNomeDisciplina("JAVA");
+        listaDisciplinas.add(disciplina1);
+
+        Disciplina disciplina2 = new Disciplina();
+        disciplina2.setNomeDisciplina("LÓGICA");
+        listaDisciplinas.add(disciplina2);
+
+        Disciplina disciplina3 = new Disciplina();
+        disciplina3.setNomeDisciplina("DBA");
+        listaDisciplinas.add(disciplina3);
     }
-    
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-         }
-    }
+}
